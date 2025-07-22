@@ -46,9 +46,10 @@ async function getItems(
       data: data as ShoppingItem[],
       success: true
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Failed to fetch items';
     return res.status(500).json({
-      error: err.message || 'Failed to fetch items',
+      error: errorMessage,
       success: false
     });
   }
@@ -94,9 +95,10 @@ async function createItem(
       data,
       success: true
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Failed to create item';
     return res.status(500).json({
-      error: err.message || 'Failed to create item',
+      error: errorMessage,
       success: false
     });
   }

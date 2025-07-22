@@ -63,7 +63,7 @@ async function getItem(
       data: data as ShoppingItem, 
       success: true 
     })
-  } catch (_error) {
+  } catch {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
@@ -122,7 +122,7 @@ async function updateItem(
       data: data[0] as ShoppingItem, 
       success: true 
     })
-  } catch (_error) {
+  } catch {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
@@ -160,7 +160,7 @@ async function deleteItem(
       message: 'Item deleted successfully', 
       success: true 
     })
-  } catch (_error) {
+  } catch {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 

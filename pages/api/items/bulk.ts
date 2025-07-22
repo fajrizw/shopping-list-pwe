@@ -77,7 +77,7 @@ async function bulkCreate(
       data: data as ShoppingItem[], 
       success: true 
     })
-  } catch (_error) {
+  } catch {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
@@ -130,7 +130,7 @@ async function bulkUpdate(
     }
 
     res.status(200).json({ data: results, success: true })
-  } catch (_error) {
+  } catch {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
@@ -170,7 +170,7 @@ async function bulkDelete(
       message: `${data.length} items deleted successfully`, 
       success: true 
     })
-  } catch (_error) {
+  } catch {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 

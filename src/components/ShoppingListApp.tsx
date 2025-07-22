@@ -340,11 +340,11 @@ const ShoppingListApp = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-900">
+    <div className="min-h-screen bg-background text-foreground p-6 rounded-lg from-blue-50 to-indigo-100 text-gray-900">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <ShoppingCart className="w-8 h-8 text-indigo-600" />
+            <ShoppingCart className="w-8 h-8 text-foreground-600" />
             <h1 className="text-4xl font-bold text-gray-900">Shopping List</h1>
           </div>
           <p className="text-gray-600">Tugas Web Enterpise</p>

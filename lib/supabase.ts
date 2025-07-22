@@ -11,20 +11,19 @@ export const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function testSupabaseConnection() {
   try {
-    const { data, error } = await supabase
+    const { count, error } = await supabase
       .from('items')
-      .select('count', { count: 'exact' })
-      .limit(1)
-    
+      .select('*', { count: 'exact', head: true })
+
     if (error) {
       console.error('Supabase connection error:', error)
       return false
     }
-    
-    console.log('Supabase connected successfully')
+
+    console.log('Supabase connected successfully. Row count:', count)
     return true
-  } catch (error) {
-    console.error('Supabase connection failed:', error)
+  } catch (_error) {
+    console.error('Supabase connection failed:', _error)
     return false
   }
 }

@@ -9,7 +9,6 @@ import {
   ApiResponse 
 } from '../../../types/shopping'
 
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse<ShoppingItem[] | { deletedCount: number }>>
@@ -46,7 +45,6 @@ async function bulkCreate(
       })
     }
 
-    // Validate all items
     for (const item of items) {
       if (!item.name || item.name.trim() === '') {
         return res.status(400).json({ 
@@ -79,7 +77,7 @@ async function bulkCreate(
       data: data as ShoppingItem[], 
       success: true 
     })
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
@@ -132,7 +130,7 @@ async function bulkUpdate(
     }
 
     res.status(200).json({ data: results, success: true })
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
@@ -172,11 +170,10 @@ async function bulkDelete(
       message: `${data.length} items deleted successfully`, 
       success: true 
     })
-  } catch (error) {
+  } catch (_error) {
     res.status(500).json({ 
       error: 'Internal server error', 
       success: false 
     })
   }
 }
-

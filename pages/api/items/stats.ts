@@ -1,7 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { supabase } from '../../../lib/supabase'
-import { ItemStats, ApiResponse } from '../../../types/shopping'
-
+import type { ItemStats, ApiResponse } from '../../../types/shopping'
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,9 +8,9 @@ export default async function handler(
 ) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET'])
-    return res.status(405).json({ 
-      error: `Method ${req.method} Not Allowed`, 
-      success: false 
+    return res.status(405).json({
+      success: false,
+      error: `Method ${req.method} Not Allowed`
     })
   }
 
@@ -20,43 +19,47 @@ export default async function handler(
       .from('items')
       .select('completed, category')
 
-    if (error) {
-      return res.status(500).json({ 
-        error: error.message, 
-        success: false 
+    if (error || !items) {
+      return res.status(500).json({
+        success: false,
+        error: error?.message || 'Failed to fetch items'
       })
     }
 
-    // Calculate statistics
     const stats: ItemStats = {
       total: items.length,
-      completed: items.filter(item => item.completed).length,
-      pending: items.filter(item => !item.completed).length,
+      completed: 0,
+      pending: 0,
       byCategory: {}
     }
 
-    // Count by category
-    items.forEach(item => {
-      if (!stats.byCategory[item.category]) {
-        stats.byCategory[item.category] = {
-          total: 0,
-          completed: 0,
-          pending: 0
-        }
-      }
-      stats.byCategory[item.category].total++
-      if (item.completed) {
-        stats.byCategory[item.category].completed++
-      } else {
-        stats.byCategory[item.category].pending++
-      }
-    })
+    for (const item of items) {
+      const { completed, category } = item
 
-    res.status(200).json({ data: stats, success: true })
-  } catch (error) {
-    res.status(500).json({ 
-      error: 'Internal server error', 
-      success: false 
+      if (completed) stats.completed++
+      else stats.pending++
+
+      if (!stats.byCategory[category]) {
+        stats.byCategory[category] = { total: 0, completed: 0, pending: 0 }
+      }
+
+      stats.byCategory[category].total++
+      if (completed) {
+        stats.byCategory[category].completed++
+      } else {
+        stats.byCategory[category].pending++
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: stats
+    })
+  } catch (err) {
+    console.error('Unexpected error:', err)
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error'
     })
   }
 }
